@@ -3,7 +3,7 @@
 #include <BLEServer.h>
 #include <BLE2902.h>
 #include <SPI.h>
-#include <LeloRemote.h> //Get the library here : https://github.com/scanlime/arduino-lelo-remote (dont forget to modify LeloRemote.h)
+#include <LeloRemote.h>
 #include <driver/dac.h>
 #include <math.h>
 
@@ -19,7 +19,8 @@ uint32_t value = 0;
 
 int vibration;
 
-const int lookupTable[21] = {0,158,162,166,168,170,172,174,176,178,180,182,184,186,188,190,192,194,196,198,200};
+//Change these numbers if you use a different mosfet. 0= 0v, 255= 3.05v.
+const int lookupTable[21] = {0,165,171,177,183,189,195,200,205,210,215,219,223,227,231,234,237,240,242,244,246};
 
 // Function to lookup the new value based on input
 int lookupValue(int inputValue) {
@@ -81,7 +82,7 @@ class MySerialCallbacks: public BLECharacteristicCallbacks {
         Serial.println("*********");
       }
 
-      
+      //Use Z for single DAC output and P for two DAC and two mosfet control  
       if (rxValue == "DeviceType;") {
         Serial.println("$Responding to Device Enquiry");
         memmove(messageBuf, "Z:ED:c857339ba2a6;", 18);
@@ -197,3 +198,4 @@ void loop() {
         oldDeviceConnected = deviceConnected;
     }
 }
+
